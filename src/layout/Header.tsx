@@ -1,18 +1,39 @@
 import {
   alpha,
   AppBar,
+  Avatar,
   Box,
   Button,
+  IconButton,
   InputBase,
+  Menu,
+  MenuItem,
   Stack,
   Toolbar,
   Typography,
   useTheme,
 } from '@mui/material';
 import SearchIcon from '../components/icons/SearchIcon.tsx';
+import { useTypedSelector } from '../hooks/useTypedSelector.ts';
+import React, { useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { ROUTES } from '../routes/routes.ts';
 
 const Header = () => {
   const theme = useTheme();
+  const { user } = useTypedSelector(state => state.auth);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <AppBar
@@ -31,13 +52,25 @@ const Header = () => {
           spacing={1}
           sx={{ alignItems: 'center', px: 4, mb: 1 }}
         >
-          <Typography
-            variant="h6"
-            noWrap
-            sx={{ fontWeight: 'bold', width: 100 }}
+          <RouterLink
+            to={ROUTES.root}
+            style={{
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
           >
-            Posts
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                fontWeight: 'bold',
+                width: 100,
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              Posts
+            </Typography>
+          </RouterLink>
           <Box
             sx={{
               position: 'relative',
@@ -82,8 +115,45 @@ const Header = () => {
             />
           </Box>
         </Stack>
-        <Stack direction="row" gap={1} sx={{ mb: 1 }}>
-          <Button variant="outlined">Create Post</Button>
+        <Stack direction="row" gap={1} sx={{ mb: 1, pr: 4 }}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate(ROUTES.postCreate)}
+          >
+            Create Post
+          </Button>
+          {user && (
+            <>
+              <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
+                <Avatar src={user.avatar} alt={user.username} />
+              </IconButton>
+
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                onClick={handleMenuClose}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <MenuItem onClick={() => navigate(ROUTES.profile)}>
+                  {user.username}
+                </MenuItem>
+                <MenuItem onClick={() => navigate(ROUTES.postCreate)}>
+                  Create Post
+                </MenuItem>
+                <MenuItem onClick={() => navigate(ROUTES.dashboard)}>
+                  Dashboard
+                </MenuItem>
+                <MenuItem onClick={() => console.log('Settings')}>
+                  Settings
+                </MenuItem>
+                <MenuItem onClick={() => console.log('Logout')}>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </Stack>
       </Toolbar>
     </AppBar>

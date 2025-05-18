@@ -20,6 +20,13 @@ const SignupPage = Loadable(
 const PostListPage = Loadable(
   lazy(() => import('../pagescomponents/PostList')),
 );
+const ProfilePage = Loadable(lazy(() => import('../pagescomponents/Profile')));
+const PostCreateEditPage = Loadable(
+  lazy(() => import('../pagescomponents/PostCreateEdit')),
+);
+const DashboardPage = Loadable(
+  lazy(() => import('../pagescomponents/Dashboard')),
+);
 
 const router = createBrowserRouter([
   {
@@ -45,6 +52,30 @@ const router = createBrowserRouter([
       <GuestGuard>
         <SignupPage />
       </GuestGuard>
+    ),
+  },
+  {
+    path: ROUTES.profile,
+    element: (
+      <AuthGuard>
+        <ProfilePage />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: ROUTES.postCreate,
+    element: (
+      <AuthGuard>
+        <PostCreateEditPage />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: ROUTES.dashboard,
+    element: (
+      <AuthGuard>
+        <DashboardPage />
+      </AuthGuard>
     ),
   },
 ]);

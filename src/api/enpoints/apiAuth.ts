@@ -1,11 +1,7 @@
 import { EndpointBuilder } from '@reduxjs/toolkit/query';
-import {
-  AuthRequest,
-  AuthResponse,
-  SignUpResponse,
-  User,
-} from '../type/auth.ts';
+import { AuthRequest, AuthResponse, SignUpResponse } from '../type/auth.ts';
 import { AUTH } from '../index.ts';
+import { UserProfile } from '../../types/users.ts';
 
 export const apiAuth = {
   endpoints: (builder: EndpointBuilder<any, any, any>) => ({
@@ -29,7 +25,7 @@ export const apiAuth = {
         body: credentials,
       }),
     }),
-    getCurrentUser: builder.query<User, any>({
+    getCurrentUser: builder.query<UserProfile, any>({
       query: () => ({
         url: AUTH.getCurrentUser(),
         method: 'GET',

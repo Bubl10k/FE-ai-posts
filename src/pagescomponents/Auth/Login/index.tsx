@@ -4,10 +4,13 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
+  IconButton,
   Link,
   Stack,
   Typography,
 } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { ROUTES } from '../../../routes/routes.ts';
 import FormProvider from '../../../components/RHF/FormProvider.tsx';
 import { useActions } from '../../../hooks/useActions.ts';
@@ -58,6 +61,7 @@ const LoginPage = () => {
   const { setUser } = useActions();
   const navigate = useNavigate();
   const [skipGetUser, setSkipGetUser] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { data: currentUser } = useGetCurrentUserQuery(
     {},
@@ -84,7 +88,6 @@ const LoginPage = () => {
         setSkipGetUser(false);
       }
     } catch (e) {
-      console.log(e);
       toast.error('Invalid email or password. Please try again.');
     }
   };
@@ -96,8 +99,6 @@ const LoginPage = () => {
       navigate(ROUTES.root);
     }
   }, [currentUser, navigate, setUser]);
-
-  console.log(currentUser);
 
   return (
     <Box
@@ -145,6 +146,23 @@ const LoginPage = () => {
                 name="password"
                 fullWidth
                 size="small"
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      onMouseDown={(e: any) => e.preventDefault()}
+                      edge="end"
+                      aria-label="toggle password visibility"
+                    >
+                      {showPassword ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
+                    </IconButton>
+                  ),
+                }}
                 error={!!errors.password}
                 helperText={errors.password?.message}
               />

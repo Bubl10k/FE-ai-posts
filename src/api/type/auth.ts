@@ -9,8 +9,3 @@ export type AuthResponse = {
 };
 
 export type SignUpResponse = AuthResponse;
-
-export type User = {
-  id: number;
-  email: string;
-};

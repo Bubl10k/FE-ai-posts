@@ -10,3 +10,11 @@ export const AUTH = {
     };
   },
 };
+
+export const POSTS = {
+  base: () => `posts`,
+  byId: (id: number) => `posts/${id}`,
+  getUserPosts: (userId: number) => `posts/user/${userId}`,
+  createPostReaction: (postId: number) => `posts/${postId}/reactions`,
+  search: (query: string) => `posts/search?search_query=${query}`,
+};
