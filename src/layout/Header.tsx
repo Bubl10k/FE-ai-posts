@@ -42,7 +42,7 @@ const Header = () => {
         backgroundColor: 'white',
         color: 'black',
         boxShadow: 'none',
-        borderBottom: `2px solid ${theme.palette.divider}`,
+        borderBottom: `1px solid ${theme.palette.divider}`,
         maxHeight: 56,
       }}
     >

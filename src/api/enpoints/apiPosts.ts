@@ -1,21 +1,23 @@
 import { EndpointBuilder } from '@reduxjs/toolkit/query';
 import { POSTS } from '../index.ts';
 import {
+  PostDetailsResponse,
   PostListResponse,
   PostListResponseWithComments,
+  PostListResponseWithUser,
   PostResponse,
   PostUpdateCreate,
 } from '../type/posts.ts';
 
 export const apiPosts = {
   endpoints: (builder: EndpointBuilder<any, any, any>) => ({
-    getPosts: builder.query<PostListResponse[], any>({
+    getPosts: builder.query<PostListResponseWithUser[], any>({
       query: () => ({
         url: POSTS.base(),
         method: 'GET',
       }),
     }),
-    getPostById: builder.query<PostResponse, PostResponse['id']>({
+    getPostById: builder.query<PostDetailsResponse, PostResponse['id']>({
       query: id => ({
         url: POSTS.byId(id),
         method: 'GET',
@@ -51,6 +53,12 @@ export const apiPosts = {
         url: POSTS.byId(post.id),
         method: 'PUT',
         body: post,
+      }),
+    }),
+    deletePostById: builder.mutation<void, PostResponse['id']>({
+      query: id => ({
+        url: POSTS.byId(id),
+        method: 'DELETE',
       }),
     }),
   }),

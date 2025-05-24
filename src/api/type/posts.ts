@@ -1,6 +1,6 @@
 import { Reaction } from './reactions.ts';
-import { UserWithUsername } from './users.ts';
-import { CommentResponse } from './comments.ts';
+import { User, UserWithUsername } from './users.ts';
+import { CommentResponse, CommentResponseWithUser } from './comments.ts';
 
 export enum PostStatusEnum {
   VALID = 'valid',
@@ -10,7 +10,7 @@ export enum PostStatusEnum {
 
 export interface PostListResponse {
   comments: any;
-  id: number;
+  id: number | string;
   title: string;
   status: PostStatusEnum;
   reactions: Reaction[];
@@ -22,9 +22,25 @@ export interface PostListResponseWithComments extends PostListResponse {
   comments: CommentResponse[];
 }
 
+export interface PostListResponseWithUserComments extends PostListResponse {
+  comments: CommentResponseWithUser[];
+}
+
+export interface PostListResponseWithUser
+  extends PostListResponseWithUserComments {
+  user: User;
+}
+
+export interface PostDetailsResponse extends PostListResponseWithUser {
+  user: UserWithUsername;
+  comments: CommentResponseWithUser[];
+  content: string;
+}
+
 export interface PostResponse extends PostListResponse {
   user: UserWithUsername;
   comments: CommentResponse[];
+  content: string;
 }
 
 export interface PostUpdateCreate {

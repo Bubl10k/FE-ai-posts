@@ -12,8 +12,6 @@ const DashboardPage = () => {
 
   const { data: userPosts, isLoading } = useGetUserPostsQuery(user!.id);
 
-  console.log(userPosts);
-
   const { totalReactions, totalComments } = useMemo(() => {
     const totalReactions =
       userPosts?.reduce((sum, post) => sum + post.reactions.length, 0) ?? 0;

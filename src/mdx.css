@@ -1,0 +1,12 @@
+.editor-content {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /*min-height: 300px;*/
+    font-family: 'Roboto', sans-serif;
+}
+
+.editor-placeholder {
+    color: #959595;
+    pointer-events: none;
+    font-size: 18px;
+}

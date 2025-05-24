@@ -12,14 +12,23 @@ import {
   UndoRedo,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
+import '../../mdx.css';
 
 type Props = {
   markdown: string;
   setMarkdown: (markdown: string) => void;
+  useStyles?: boolean;
+  placeholder?: string;
   showErrorIcon?: boolean;
 };
 
-const MarkdownEditor = ({ markdown, setMarkdown }: Props) => {
+const MarkdownEditor = ({
+  markdown,
+  setMarkdown,
+  useStyles,
+  placeholder,
+  // showErrorIcon,
+}: Props) => {
   async function imageUploadHandler(image: File) {
     const formData = new FormData();
     formData.append('image', image);
@@ -35,6 +44,12 @@ const MarkdownEditor = ({ markdown, setMarkdown }: Props) => {
 
   return (
     <MDXEditor
+      className={useStyles ? 'editor-content' : ''}
+      placeholder={
+        placeholder && (
+          <span className="editor-placeholder">{placeholder}</span>
+        )
+      }
       markdown={markdown}
       onChange={setMarkdown}
       plugins={[

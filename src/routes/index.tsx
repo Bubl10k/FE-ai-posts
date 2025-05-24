@@ -20,6 +20,9 @@ const SignupPage = Loadable(
 const PostListPage = Loadable(
   lazy(() => import('../pagescomponents/PostList')),
 );
+const PostDetailPage = Loadable(
+  lazy(() => import('../pagescomponents/PostDetailPage')),
+);
 const ProfilePage = Loadable(lazy(() => import('../pagescomponents/Profile')));
 const PostCreateEditPage = Loadable(
   lazy(() => import('../pagescomponents/PostCreateEdit')),
@@ -71,10 +74,26 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: ROUTES.postEditPath,
+    element: (
+      <AuthGuard>
+        <PostCreateEditPage />
+      </AuthGuard>
+    ),
+  },
+  {
     path: ROUTES.dashboard,
     element: (
       <AuthGuard>
         <DashboardPage />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: ROUTES.postDetailPath,
+    element: (
+      <AuthGuard>
+        <PostDetailPage />
       </AuthGuard>
     ),
   },

@@ -8,31 +8,36 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
   useCreatePostMutation,
+  useGetPostByIdQuery,
   useUpdatePostMutation,
 } from '../../api/extentedApi.ts';
 import { toast } from 'react-toastify';
 import RHFTextField from '../../components/RHF/RHFTextField.tsx';
 import RHFMarkdownEditor from '../../components/RHF/RHFMarkdownEditor.tsx';
-
-type Props = {
-  postId?: number;
-};
+import { useParams } from 'react-router-dom';
 
 type FormValues = {
   title: string;
   content: string;
 };
 
-const PostCreateEditPage = ({ postId }: Props) => {
+const PostCreateEditPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const postId = id ? Number(id) : undefined;
+
   const [createPost] = useCreatePostMutation();
   const [updatePost] = useUpdatePostMutation();
 
+  const { data: postData, isSuccess } = useGetPostByIdQuery(postId!, {
+    skip: !postId,
+  });
+
   const defaultValues = useMemo(
     () => ({
-      title: '',
-      content: '',
+      title: postData?.title || '',
+      content: postData?.content || '',
     }),
-    [],
+    [postData?.title, postData?.content],
   );
 
   const schema = yup.object({
@@ -42,16 +47,17 @@ const PostCreateEditPage = ({ postId }: Props) => {
 
   const methods = useForm({ resolver: yupResolver(schema), defaultValues });
 
-  const { handleSubmit, reset, watch } = methods;
+  const { handleSubmit, reset } = methods;
 
   const onSubmit = async (data: FormValues) => {
     try {
       if (postId) {
         await updatePost({ id: postId, ...data }).unwrap();
+        toast.success('Post updated successfully');
       } else {
         await createPost(data).unwrap();
+        toast.success('Post created successfully');
       }
-      toast.success('Post created successfully');
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
@@ -60,10 +66,15 @@ const PostCreateEditPage = ({ postId }: Props) => {
   };
 
   useEffect(() => {
-    reset(defaultValues);
-  }, [reset, defaultValues]);
-
-  console.log(watch());
+    if (postData && isSuccess) {
+      reset({
+        title: postData.title,
+        content: postData.content,
+      });
+    } else {
+      reset(defaultValues);
+    }
+  }, [postData, isSuccess, reset, defaultValues]);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -112,7 +123,7 @@ const PostCreateEditPage = ({ postId }: Props) => {
         sx={{ width: '55%', pt: '1rem', justifyContent: 'center' }}
       >
         <Button variant="contained" type="submit">
-          Publish
+          {postId ? 'Update' : 'Publish'}
         </Button>
         <Button variant="outlined" type="submit">
           Save as draft

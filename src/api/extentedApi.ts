@@ -15,4 +15,5 @@ export const {
   useGetUserPostsQuery,
   useSearchPostsQuery,
   useUpdatePostMutation,
+  useDeletePostByIdMutation,
 } = extendedApi;

@@ -4,6 +4,9 @@ export const ROUTES = {
   signup: '/signup',
   profile: '/profile',
   postCreate: '/post/create',
-  postEdit: '/post/edit/:id',
+  postEditPath: '/post/edit/:id',
+  postEdit: (id: string | number) => `/post/edit/${id}`,
+  postDetailPath: '/post/:id',
+  postDetail: (id: string | number) => `/post/${id}`,
   dashboard: '/dashboard',
 };
