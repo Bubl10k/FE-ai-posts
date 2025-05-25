@@ -136,7 +136,7 @@ const Header = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
               >
-                <MenuItem onClick={() => navigate(ROUTES.profile)}>
+                <MenuItem onClick={() => navigate(ROUTES.profile(user.id))}>
                   {user.username}
                 </MenuItem>
                 <MenuItem onClick={() => navigate(ROUTES.postCreate)}>

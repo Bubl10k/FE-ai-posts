@@ -30,6 +30,9 @@ const PostCreateEditPage = Loadable(
 const DashboardPage = Loadable(
   lazy(() => import('../pagescomponents/Dashboard')),
 );
+const EditProfilePage = Loadable(
+  lazy(() => import('../pagescomponents/Profile/EditProfilePage')),
+);
 
 const router = createBrowserRouter([
   {
@@ -58,10 +61,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: ROUTES.profile,
+    path: ROUTES.profilePath,
     element: (
       <AuthGuard>
         <ProfilePage />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: ROUTES.profileEdit,
+    element: (
+      <AuthGuard>
+        <EditProfilePage />
       </AuthGuard>
     ),
   },

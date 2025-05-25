@@ -111,9 +111,7 @@ const PostListCard = ({ post }: Props) => {
               alt={comment.user.username}
               src={comment.user.avatar}
               sx={{ width: 36, height: 36, cursor: 'pointer' }}
-              onClick={() =>
-                console.log(`navigate to profile of ${comment.user.username}`)
-              }
+              onClick={() => navigate(ROUTES.profile(comment.user.id))}
             />
             <Stack
               direction="column"

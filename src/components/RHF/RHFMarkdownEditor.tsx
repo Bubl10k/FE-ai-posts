@@ -1,12 +1,19 @@
-import MarkdownEditor from '../Posts/MarkdownEditor.tsx';
+import MarkdownEditor from '../MarkdownEditor.tsx';
 import { useController, useFormContext } from 'react-hook-form';
 
 type Props = {
   name: string;
+  placeholder?: string;
+  className?: string;
   showErrorIcon?: boolean;
 };
 
-const RHFMarkdownEditor = ({ name, showErrorIcon }: Props) => {
+const RHFMarkdownEditor = ({
+  name,
+  showErrorIcon,
+  placeholder,
+  className,
+}: Props) => {
   const { control } = useFormContext();
   const {
     field: { value, onChange },
@@ -20,7 +27,9 @@ const RHFMarkdownEditor = ({ name, showErrorIcon }: Props) => {
     <MarkdownEditor
       markdown={value}
       setMarkdown={onChange}
+      placeholder={placeholder}
       showErrorIcon={showErrorIcon}
+      className={className}
     />
   );
 };

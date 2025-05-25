@@ -44,7 +44,6 @@ export const baseQueryWithReauth: BaseQueryFn<
 
       if (refreshResult.data) {
         localStorageService.setAccessToken(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (refreshResult.data as any).access_token,
         );
         result = await baseQuery(args, api, extraOptions);

@@ -10,10 +10,33 @@ import {
 import { useTypedSelector } from '../../hooks/useTypedSelector.ts';
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import { formatDate } from '../../utils/date.ts';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from '../../routes/routes.ts';
+import {
+  useFollowUserMutation,
+  useGetUserByIdQuery,
+} from '../../api/extentedApi.ts';
+import LoadingScreen from '../../components/LoadingScreen.tsx';
 
 const ProfilePage = () => {
+  const { id } = useParams<{ id: string }>();
   const theme = useTheme();
+
   const { user } = useTypedSelector(state => state.auth);
+  const { data: userProfile, isLoading } = useGetUserByIdQuery(Number(id));
+  const [follow, { isLoading: isFollowLoading }] = useFollowUserMutation();
+  const [unfollow, { isLoading: isUnfollowLoading }] = useFollowUserMutation();
+
+  const navigate = useNavigate();
+
+  const isOwner = userProfile?.id === user?.id;
+  const isFollowing = userProfile?.followers.some(
+    follower => follower.id === user?.id,
+  );
+
+  console.log(userProfile);
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <>
@@ -42,16 +65,43 @@ const ProfilePage = () => {
             }}
           >
             <Avatar
-              src={user?.avatar}
-              alt={user?.username}
+              src={userProfile?.avatar}
+              alt={userProfile?.username}
               sx={{ width: 128, height: 128, border: '14px solid #ffffff' }}
             />
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="contained">Edit profile</Button>
+            {isOwner ? (
+              <Button
+                variant="contained"
+                onClick={() => navigate(ROUTES.profileEdit)}
+              >
+                Edit profile
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (isFollowing) {
+                    return unfollow({
+                      userId: user!.id,
+                      followId: Number(id),
+                    });
+                  } else {
+                    return follow({
+                      userId: user!.id,
+                      followId: Number(id),
+                    });
+                  }
+                }}
+                disabled={isFollowLoading || isUnfollowLoading}
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
+              </Button>
+            )}
           </Box>
           <Typography variant="h1" fontSize="1.875rem" fontWeight={700}>
-            {user!.username}
+            {userProfile?.username}
           </Typography>
           <Typography color="textSecondary" component="div">
             <Stack
@@ -61,7 +111,9 @@ const ProfilePage = () => {
               justifyContent="center"
             >
               <CakeOutlinedIcon fontSize="small" />
-              <span>Joined on {formatDate(new Date(user!.created_at))}</span>
+              <span>
+                Joined on {formatDate(new Date(userProfile!.created_at))}
+              </span>
             </Stack>
           </Typography>
         </Stack>

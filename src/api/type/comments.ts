@@ -1,4 +1,5 @@
 import { User } from './users.ts';
+import { ResponseToCommentResponse } from './commentReponses.ts';
 
 export interface CommentResponse {
   id: number;
@@ -10,4 +11,9 @@ export interface CommentResponse {
 
 export interface CommentResponseWithUser extends CommentResponse {
   user: User;
+  comment_responses?: ResponseToCommentResponse[];
+}
+
+export interface CommentUpdateCreate {
+  content: string;
 }

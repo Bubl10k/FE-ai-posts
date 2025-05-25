@@ -12,12 +12,12 @@ import {
   UndoRedo,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
-import '../../mdx.css';
+import '../mdx.css';
 
 type Props = {
   markdown: string;
   setMarkdown: (markdown: string) => void;
-  useStyles?: boolean;
+  className?: string;
   placeholder?: string;
   showErrorIcon?: boolean;
 };
@@ -25,7 +25,7 @@ type Props = {
 const MarkdownEditor = ({
   markdown,
   setMarkdown,
-  useStyles,
+  className,
   placeholder,
   // showErrorIcon,
 }: Props) => {
@@ -44,11 +44,10 @@ const MarkdownEditor = ({
 
   return (
     <MDXEditor
-      className={useStyles ? 'editor-content' : ''}
+      // className={useStyles ? 'editor-content' : ''}
+      className={className}
       placeholder={
-        placeholder && (
-          <span className="editor-placeholder">{placeholder}</span>
-        )
+        placeholder && <span className="editor-placeholder">{placeholder}</span>
       }
       markdown={markdown}
       onChange={setMarkdown}
